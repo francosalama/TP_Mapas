@@ -72,13 +72,13 @@ public class MapasFragment extends Fragment {
         btnTest03   = (Button) layoutRoot.findViewById(R.id.btnTest03) ;
         btnTest04   = (Button) layoutRoot.findViewById(R.id.btnTest04) ;
         //btnTest05   = (Button) layoutRoot.findViewById(R.id.btnTest05) ;
-    }
+}
 
     private void SetearListeners() {
-        btnTest01.setOnClickListener(btnTest01_Click);
-        btnTest02.setOnClickListener(btnTest02_Click);
-        btnTest03.setOnClickListener(btnTest03_Click);
-        btnTest04.setOnClickListener(btnTest04_Click);
+        //btnTest01.setOnClickListener(btnTest01_Click);
+        //btnTest02.setOnClickListener(btnTest02_Click);
+        //btnTest03.setOnClickListener(btnTest03_Click);
+        //btnTest04.setOnClickListener(btnTest04_Click);
         //btnTest05.setOnClickListener(btnTest05_Click);
     }
 
