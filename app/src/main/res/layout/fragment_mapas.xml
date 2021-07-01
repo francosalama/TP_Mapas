@@ -32,17 +32,18 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnTest03"
+                android:id="@+id/btnTest01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
 
             <Button
-                android:id="@+id/btnTest04"
+                android:id="@+id/btnTest02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -51,15 +52,17 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnTest01"
+                android:id="@+id/btnTest03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
 
             <Button
-                android:id="@+id/btnTest02"
+                android:id="@+id/btnTest04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Button" />
         </LinearLayout>
     </LinearLayout>
