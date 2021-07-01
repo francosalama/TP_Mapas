@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void CrearFragments(){
         fragmentMapas = new MapasFragment();
-        CrearFragments();
-        IrAlFragmentMapas();
     }
 
     public void ReemplazarFragment(Fragment fragmento){
