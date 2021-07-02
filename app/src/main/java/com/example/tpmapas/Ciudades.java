@@ -7,4 +7,9 @@ public class Ciudades {
     public String clase;
     public String countrycode;
     public int population;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

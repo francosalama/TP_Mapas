@@ -21,11 +21,15 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 public class MapasFragment extends Fragment {
@@ -35,7 +39,11 @@ public class MapasFragment extends Fragment {
     private MapView     mMapView;
     private GoogleMap   googleMap;
     Resultado resultadoCiudades;
-
+    TareaAsincronicaCiudades miTarea = new TareaAsincronicaCiudades();
+    Type fooType = new TypeToken<ArrayList<Ciudades>>() {}.getType();
+    ArrayList<Ciudades> listaCiudades = new ArrayList<Ciudades>();
+    ArrayList<Ciudades> listaCiudadesRandom = new ArrayList<Ciudades>();
+    Ciudades ciudadMapa = new Ciudades();
     public MapasFragment() {
         // Required empty public constructor
     }
@@ -61,7 +69,13 @@ public class MapasFragment extends Fragment {
 
             }
         }
-        mMapView.getMapAsync(mMapView_getMapAsync);
+
+
+        miTarea.execute();
+
+        //mMapView.getMapAsync(mMapView_getMapAsync);
+
+
 
         return layoutRoot;
     }
@@ -117,14 +131,22 @@ public class MapasFragment extends Fragment {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
             Gson ciudades = new Gson();
-            resultadoCiudades = ciudades.fromJson(resultado,Resultado.class);
+            //resultadoCiudades = ciudades.fromJson(resultado,Resultado.class);
+            listaCiudades = ciudades.fromJson(resultado,fooType);
+            listaCiudadesRandom = obtenerCiudadesRandom();
+            ciudadMapa = obtenerCiudadMapa();
+            Log.d("random", listaCiudadesRandom.toString());
+            Log.d("ciudades", listaCiudades.toString());
+            Log.d("ciudadMapa", ciudadMapa.name);
+            setearTextoBotones();
+            mMapView.getMapAsync(mMapView_getMapAsync);
             //peliculasAdapter = new ArrayAdapter<Movies>(getActivity(), android.R.layout.simple_list_item_1, resultadoPeliculas.Search);
         }
     }
 
     private void ObtenerReferencias() {
         mMapView    = (MapView) layoutRoot.findViewById(R.id.mapView);
-        btnTest01   = (Button) layoutRoot.findViewById(R.id.btnTest02) ;
+        btnTest01   = (Button) layoutRoot.findViewById(R.id.btnTest01) ;
         btnTest02   = (Button) layoutRoot.findViewById(R.id.btnTest02) ;
         btnTest03   = (Button) layoutRoot.findViewById(R.id.btnTest03) ;
         btnTest04   = (Button) layoutRoot.findViewById(R.id.btnTest04) ;
@@ -144,17 +166,42 @@ public class MapasFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap mMap) {
             googleMap = mMap;
-            LatLng latLngOrt = new LatLng(-34.60986467804213, -58.42923010170146);
+            LatLng latLngCiudad = new LatLng(ciudadMapa.lat, ciudadMapa.lng);
             MarkerOptions markerSydney = new MarkerOptions()
-                    .position(latLngOrt)
-                    .title("Escuela ORT")
-                    .snippet("Es una escuela");
+                    .position(latLngCiudad)
+                    .title("Ciudad random")
+                    .snippet("Ciudad random");
             googleMap.addMarker (markerSydney);
 
             CameraPosition  cameraPosition;
-            cameraPosition = new CameraPosition.Builder().target(latLngOrt).zoom(15).build();
+            cameraPosition = new CameraPosition.Builder().target(latLngCiudad).zoom(15).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         }
     };
+
+    public ArrayList<Ciudades> obtenerCiudadesRandom(){
+        ArrayList<Ciudades> listaCiudadesRandom = new ArrayList<Ciudades>();
+        for(int i = 0; i < 4; i++){
+            Random r = new Random();
+            int pos = r.nextInt(listaCiudades.size());
+            listaCiudadesRandom.add(listaCiudades.get(pos));
+        }
+        return listaCiudadesRandom;
+    }
+
+    public void setearTextoBotones(){
+        btnTest01.setText(listaCiudadesRandom.get(0).name);
+        btnTest02.setText(listaCiudadesRandom.get(1).name);
+        btnTest03.setText(listaCiudadesRandom.get(2).name);
+        btnTest04.setText(listaCiudadesRandom.get(3).name);
+    }
+
+    public Ciudades obtenerCiudadMapa(){
+        Ciudades ciudadMapa;
+        Random r = new Random();
+        int pos = r.nextInt(listaCiudadesRandom.size());
+        ciudadMapa = listaCiudadesRandom.get(pos);
+        return ciudadMapa;
+    }
 }
