@@ -1,6 +1,7 @@
 package com.example.tpmapas;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -38,6 +39,7 @@ public class MapasFragment extends Fragment {
     private Button      btnTest01, btnTest02, btnTest03, btnTest04, btnTest05;
     private MapView     mMapView;
     private GoogleMap   googleMap;
+    String nombre = null;
     Resultado resultadoCiudades;
     TareaAsincronicaCiudades miTarea = new TareaAsincronicaCiudades();
     Type fooType = new TypeToken<ArrayList<Ciudades>>() {}.getType();
@@ -58,7 +60,7 @@ public class MapasFragment extends Fragment {
 
             ObtenerReferencias();
 
-            SetearListeners();
+
 
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume(); // needed to get the map to display immediately
@@ -72,6 +74,8 @@ public class MapasFragment extends Fragment {
 
 
         miTarea.execute();
+
+        SetearListeners();
 
         //mMapView.getMapAsync(mMapView_getMapAsync);
 
@@ -154,12 +158,52 @@ public class MapasFragment extends Fragment {
 }
 
     private void SetearListeners() {
-        //btnTest01.setOnClickListener(btnTest01_Click);
-        //btnTest02.setOnClickListener(btnTest02_Click);
-        //btnTest03.setOnClickListener(btnTest03_Click);
-        //btnTest04.setOnClickListener(btnTest04_Click);
-        //btnTest05.setOnClickListener(btnTest05_Click);
+        btnTest01.setOnClickListener(btnBotones_Click);
+        btnTest02.setOnClickListener(btnBotones_Click);
+        btnTest03.setOnClickListener(btnBotones_Click);
+        btnTest04.setOnClickListener(btnBotones_Click);
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    private String GetViewIdString(int Id){
+        Resources res = getResources();
+        String viewName = res.getResourceEntryName(Id);
+        return viewName;
+    }
+
+    View.OnClickListener btnBotones_Click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String strButtonId;
+            String strNombreBoton;
+            Button btnPresionado;
+            btnPresionado = (Button)v;
+            strButtonId = GetViewIdString(v.getId());
+            strNombreBoton = btnPresionado.getText().toString();
+
+            if(strNombreBoton == ciudadMapa.name){
+                Log.d("juego", "ganaste");
+                listaCiudadesRandom = obtenerCiudadesRandom();
+                ciudadMapa = obtenerCiudadMapa();
+                Log.d("random", listaCiudadesRandom.toString());
+                Log.d("ciudades", listaCiudades.toString());
+                Log.d("ciudadMapa", ciudadMapa.name);
+                setearTextoBotones();
+                mMapView.getMapAsync(mMapView_getMapAsync);
+            }
+            else{
+                Log.d("juego", "perdiste");
+                MainActivity actividadContenedora;
+                actividadContenedora = (MainActivity) getActivity();
+                assert actividadContenedora != null;
+                actividadContenedora.IrAlFragmentRanking(nombre);
+            }
+
+        }
+    };
 
     protected OnMapReadyCallback mMapView_getMapAsync = new OnMapReadyCallback() {
         @SuppressLint("MissingPermission")

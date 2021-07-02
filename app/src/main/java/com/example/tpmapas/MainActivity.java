@@ -42,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
     public void IrAlFragmentInicial(){
         ReemplazarFragment(fragmentInicial);
     }
-    public void IrAlFragmentJuego(){
+    public void IrAlFragmentJuego(String nombre){
+        fragmentJuego.setNombre(nombre);
         ReemplazarFragment(fragmentJuego);
     }
-    public void IrAlFragmentRanking(){
+    public void IrAlFragmentRanking(String nombre){
+        fragmentRanking.setNombre(nombre);
         ReemplazarFragment(fragmentRanking);
     }
     public void IrAlFragmentMapas(){

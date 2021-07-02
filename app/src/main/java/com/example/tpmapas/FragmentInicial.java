@@ -51,7 +51,7 @@ public class FragmentInicial extends Fragment {
             actividadContenedora = (MainActivity) getActivity();
             nombre = edNombre.getText().toString();
             assert actividadContenedora != null;
-            actividadContenedora.IrAlFragmentJuego();
+            actividadContenedora.IrAlFragmentJuego(nombre);
         }
     };
 }

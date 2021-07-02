@@ -17,6 +17,9 @@ public class FragmentJuego extends Fragment {
     Button btnRanking;
     Button btnComenzar;
 
+    String nombre = null;
+
+
     public FragmentJuego() {
         // Required empty public constructor
     }
@@ -44,6 +47,10 @@ public class FragmentJuego extends Fragment {
         btnRanking.setOnClickListener(btnRanking_Click);
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     View.OnClickListener btnComenzar_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -60,7 +67,7 @@ public class FragmentJuego extends Fragment {
             MainActivity actividadContenedora;
             actividadContenedora = (MainActivity) getActivity();
             assert actividadContenedora != null;
-            actividadContenedora.IrAlFragmentRanking();
+            actividadContenedora.IrAlFragmentRanking(nombre);
         }
     };
 }
