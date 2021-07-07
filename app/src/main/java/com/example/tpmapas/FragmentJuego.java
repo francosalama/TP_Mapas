@@ -57,7 +57,7 @@ public class FragmentJuego extends Fragment {
             MainActivity actividadContenedora;
             actividadContenedora = (MainActivity) getActivity();
             assert actividadContenedora != null;
-            actividadContenedora.IrAlFragmentMapas();
+            actividadContenedora.IrAlFragmentMapas(nombre);
         }
     };
 
@@ -67,7 +67,7 @@ public class FragmentJuego extends Fragment {
             MainActivity actividadContenedora;
             actividadContenedora = (MainActivity) getActivity();
             assert actividadContenedora != null;
-            actividadContenedora.IrAlFragmentRanking(nombre);
+            //actividadContenedora.IrAlFragmentRanking(nombre);
         }
     };
 }

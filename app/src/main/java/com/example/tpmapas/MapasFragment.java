@@ -7,12 +7,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -45,7 +48,11 @@ public class MapasFragment extends Fragment {
     Type fooType = new TypeToken<ArrayList<Ciudades>>() {}.getType();
     ArrayList<Ciudades> listaCiudades = new ArrayList<Ciudades>();
     ArrayList<Ciudades> listaCiudadesRandom = new ArrayList<Ciudades>();
+    ArrayList<Ranking> listaJugadores = new ArrayList<Ranking>();
+    Ranking jugador = new Ranking();
     Ciudades ciudadMapa = new Ciudades();
+    CountDownTimer cronometro;
+
     public MapasFragment() {
         // Required empty public constructor
     }
@@ -73,11 +80,15 @@ public class MapasFragment extends Fragment {
         }
 
 
+
         miTarea.execute();
 
         SetearListeners();
 
         //mMapView.getMapAsync(mMapView_getMapAsync);
+
+
+        jugador.cantJugadasAcertadas = 0;
 
 
 
@@ -166,6 +177,7 @@ public class MapasFragment extends Fragment {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        Log.d("nombre", nombre);
     }
 
     private String GetViewIdString(int Id){
@@ -186,6 +198,7 @@ public class MapasFragment extends Fragment {
 
             if(strNombreBoton == ciudadMapa.name){
                 Log.d("juego", "ganaste");
+                cronometro.cancel();
                 listaCiudadesRandom = obtenerCiudadesRandom();
                 ciudadMapa = obtenerCiudadMapa();
                 Log.d("random", listaCiudadesRandom.toString());
@@ -193,13 +206,17 @@ public class MapasFragment extends Fragment {
                 Log.d("ciudadMapa", ciudadMapa.name);
                 setearTextoBotones();
                 mMapView.getMapAsync(mMapView_getMapAsync);
+                jugador.cantJugadasAcertadas ++;
+
             }
             else{
                 Log.d("juego", "perdiste");
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
-                actividadContenedora.IrAlFragmentRanking(nombre);
+                actividadContenedora.IrAlFragmentRanking(listaJugadores);
+                jugador.nombre = nombre;
+                listaJugadores.add(jugador);
             }
 
         }
@@ -226,10 +243,19 @@ public class MapasFragment extends Fragment {
 
     public ArrayList<Ciudades> obtenerCiudadesRandom(){
         ArrayList<Ciudades> listaCiudadesRandom = new ArrayList<Ciudades>();
+        float distancia;
         for(int i = 0; i < 4; i++){
             Random r = new Random();
             int pos = r.nextInt(listaCiudades.size());
-            listaCiudadesRandom.add(listaCiudades.get(pos));
+
+            if(listaCiudadesRandom.contains(listaCiudades.get(pos))){
+                r = new Random();
+                pos = r.nextInt(listaCiudades.size());
+                listaCiudadesRandom.add(listaCiudades.get(pos));
+            }
+            else{
+                listaCiudadesRandom.add(listaCiudades.get(pos));
+            }
         }
         return listaCiudadesRandom;
     }
@@ -246,6 +272,44 @@ public class MapasFragment extends Fragment {
         Random r = new Random();
         int pos = r.nextInt(listaCiudadesRandom.size());
         ciudadMapa = listaCiudadesRandom.get(pos);
+        cronometro = new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                Log.d("juego", "perdiste");
+                Toast.makeText(
+                        getContext(),
+                        "Pasaron 5 segundos",
+                        Toast.LENGTH_LONG
+                ).show();
+                MainActivity actividadContenedora;
+                actividadContenedora = (MainActivity) getActivity();
+                assert actividadContenedora != null;
+                actividadContenedora.IrAlFragmentRanking(listaJugadores);
+                jugador.nombre = nombre;
+                listaJugadores.add(jugador);
+            }
+
+        }.start();
         return ciudadMapa;
+    }
+
+    public static float distanceInMeters (float lat_a, float lng_a, float lat_b, float lng_b )
+    {
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b-lat_a);
+        double lngDiff = Math.toRadians(lng_b-lng_a);
+        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
+                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Float(distance * meterConversion).floatValue();
     }
 }

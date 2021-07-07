@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     MapasFragment fragmentMapas;
@@ -46,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
         fragmentJuego.setNombre(nombre);
         ReemplazarFragment(fragmentJuego);
     }
-    public void IrAlFragmentRanking(String nombre){
-        fragmentRanking.setNombre(nombre);
+    public void IrAlFragmentRanking(ArrayList<Ranking> listaJugadores){
+        fragmentRanking.setearLista(listaJugadores);
         ReemplazarFragment(fragmentRanking);
     }
-    public void IrAlFragmentMapas(){
+    public void IrAlFragmentMapas(String nombre){
+        fragmentMapas.setNombre(nombre);
         ReemplazarFragment(fragmentMapas);
     }
     public void EnviarMensaje(String nombre){
