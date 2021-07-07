@@ -211,12 +211,13 @@ public class MapasFragment extends Fragment {
             }
             else{
                 Log.d("juego", "perdiste");
+                jugador.nombre = nombre;
+                listaJugadores.add(jugador);
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
                 actividadContenedora.IrAlFragmentRanking(listaJugadores);
-                jugador.nombre = nombre;
-                listaJugadores.add(jugador);
+
             }
 
         }
