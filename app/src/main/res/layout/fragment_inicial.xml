@@ -10,7 +10,7 @@
         android:id="@+id/tvNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingres su nombre: " />
+        android:text="Ingrese su nombre: " />
 
     <EditText
         android:id="@+id/edNombre"

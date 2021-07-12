@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +43,7 @@ public class MapasFragment extends Fragment {
     private Button      btnTest01, btnTest02, btnTest03, btnTest04, btnTest05;
     private MapView     mMapView;
     private GoogleMap   googleMap;
+    private TextView tvTiempo;
     String nombre = null;
     Resultado resultadoCiudades;
     TareaAsincronicaCiudades miTarea = new TareaAsincronicaCiudades();
@@ -52,6 +54,8 @@ public class MapasFragment extends Fragment {
     Ranking jugador = new Ranking();
     Ciudades ciudadMapa = new Ciudades();
     CountDownTimer cronometro;
+    int duration;
+    timerHelper timer = new timerHelper();
 
     public MapasFragment() {
         // Required empty public constructor
@@ -81,13 +85,14 @@ public class MapasFragment extends Fragment {
 
 
 
+
         miTarea.execute();
 
         SetearListeners();
 
         //mMapView.getMapAsync(mMapView_getMapAsync);
 
-
+        timer.starStop(true);
         jugador.cantJugadasAcertadas = 0;
 
 
@@ -165,6 +170,7 @@ public class MapasFragment extends Fragment {
         btnTest02   = (Button) layoutRoot.findViewById(R.id.btnTest02) ;
         btnTest03   = (Button) layoutRoot.findViewById(R.id.btnTest03) ;
         btnTest04   = (Button) layoutRoot.findViewById(R.id.btnTest04) ;
+        tvTiempo = (TextView) layoutRoot.findViewById(R.id.tvTiempo);
         //btnTest05   = (Button) layoutRoot.findViewById(R.id.btnTest05) ;
 }
 
@@ -210,9 +216,12 @@ public class MapasFragment extends Fragment {
 
             }
             else{
+                cronometro.cancel();
                 Log.d("juego", "perdiste");
                 jugador.nombre = nombre;
                 listaJugadores.add(jugador);
+                timer.starStop();
+                jugador.tiempo = timer.getTimerText();
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
@@ -273,25 +282,31 @@ public class MapasFragment extends Fragment {
         Random r = new Random();
         int pos = r.nextInt(listaCiudadesRandom.size());
         ciudadMapa = listaCiudadesRandom.get(pos);
+        duration = 5;
         cronometro = new CountDownTimer(5000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-
+                if(tvTiempo != null){
+                    tvTiempo.setText("00: 0" + duration);
+                }
+                duration --;
             }
 
             public void onFinish() {
                 Log.d("juego", "perdiste");
                 Toast.makeText(
-                        getContext(),
+                        getActivity(),
                         "Pasaron 5 segundos",
                         Toast.LENGTH_LONG
                 ).show();
+                timer.starStop();
+                jugador.tiempo = timer.getTimerText();
+                jugador.nombre = nombre;
+                listaJugadores.add(jugador);
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
                 actividadContenedora.IrAlFragmentRanking(listaJugadores);
-                jugador.nombre = nombre;
-                listaJugadores.add(jugador);
             }
 
         }.start();

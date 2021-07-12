@@ -10,11 +10,11 @@
         android:id="@+id/tvObjetivos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Objetivos" />
+        android:text="El objetivo del juego es ir adivinando cual es la ciudad que aparece en el mapa. En caso de haberla adivinado seguis jugando. En caso de que respondas de manera incorrecta o demores 5 segundos en responder perdes automaticamente." />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button

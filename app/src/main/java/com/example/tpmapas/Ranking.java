@@ -7,10 +7,10 @@ public class Ranking {
     //public int posicion;
     public String nombre;
     public int cantJugadasAcertadas;
-    //public Timer tiempoDeJuego;
+    public String tiempo;
 
     @Override
     public String toString() {
-        return nombre + " " +  cantJugadasAcertadas;
+        return nombre + " " +  cantJugadasAcertadas + " "  + tiempo;
     }
 }
